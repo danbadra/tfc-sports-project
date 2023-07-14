@@ -1,8 +1,8 @@
-import { 
-  DataTypes, 
-  InferAttributes, 
-  InferCreationAttributes, 
-  Model, 
+import {
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
   CreationOptional,
 } from 'sequelize';
 import db from '.';
@@ -16,30 +16,30 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 }
 
 User.init({
-  id:{
+  id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
   username: {
-    type:DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   role: {
-    type:DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   email: {
-    type:DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   password: {
-    type:DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
 }, {
   sequelize: db,
   tableName: 'users',
   timestamps: false,
-})
+});

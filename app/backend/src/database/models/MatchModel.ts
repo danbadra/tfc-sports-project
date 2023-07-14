@@ -1,4 +1,4 @@
-import { DataTypes, Model, InferAttributes, InferCreationAttributes } from "sequelize";
+import { DataTypes, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
 import db from '.';
 import Team from './TeamModel';
 
@@ -22,19 +22,19 @@ Match.init({
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  homeTeamGoals:  {
+  homeTeamGoals: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  awayTeamId:  {
+  awayTeamId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  awayTeamGoals:  {
+  awayTeamGoals: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  inProgress:  {
+  inProgress: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
@@ -43,10 +43,10 @@ Match.init({
   tableName: 'matches',
   timestamps: false,
   underscored: true,
-})
+});
 
-Team.hasMany(Match, {foreignKey: 'home_team_id' as 'id'});
-Team.hasMany(Match, {foreignKey: 'away_team_id' as 'id'});
+Team.hasMany(Match, { foreignKey: 'home_team_id' as 'id' });
+Team.hasMany(Match, { foreignKey: 'away_team_id' as 'id' });
 
-Match.belongsTo(Team, {foreignKey: 'id' as 'home_team_id'});
-Match.belongsTo(Team, {foreignKey: 'id' as 'away_team_id'});
+Match.belongsTo(Team, { foreignKey: 'id' as 'home_team_id' });
+Match.belongsTo(Team, { foreignKey: 'id' as 'away_team_id' });
