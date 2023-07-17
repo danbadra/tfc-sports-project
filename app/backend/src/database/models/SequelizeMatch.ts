@@ -1,8 +1,9 @@
 import { DataTypes, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
 import db from '.';
-import Team from './TeamModel';
+import SequelizeTeam from './SequelizeTeam';
 
-export default class Match extends Model<InferAttributes<Match>, InferCreationAttributes<Match>> {
+export default class SequelizeMatch extends Model<InferAttributes<SequelizeMatch>,
+InferCreationAttributes<SequelizeMatch>> {
   declare id: number;
   declare homeTeamId: number;
   declare homeTeamGoals: number;
@@ -11,7 +12,7 @@ export default class Match extends Model<InferAttributes<Match>, InferCreationAt
   declare inProgress: boolean;
 }
 
-Match.init({
+SequelizeMatch.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -45,8 +46,8 @@ Match.init({
   underscored: true,
 });
 
-Team.hasMany(Match, { foreignKey: 'home_team_id' as 'id' });
-Team.hasMany(Match, { foreignKey: 'away_team_id' as 'id' });
+SequelizeTeam.hasMany(SequelizeMatch, { foreignKey: 'home_team_id' as 'id' });
+SequelizeTeam.hasMany(SequelizeMatch, { foreignKey: 'away_team_id' as 'id' });
 
-Match.belongsTo(Team, { foreignKey: 'id' as 'home_team_id' });
-Match.belongsTo(Team, { foreignKey: 'id' as 'away_team_id' });
+SequelizeMatch.belongsTo(SequelizeTeam, { foreignKey: 'id' as 'home_team_id' });
+SequelizeMatch.belongsTo(SequelizeTeam, { foreignKey: 'id' as 'away_team_id' });
