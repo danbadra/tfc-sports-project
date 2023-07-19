@@ -11,7 +11,7 @@ export default class LoginController {
     const login = { email, password };
     const result = await this.loginService.validateLogin(login);
     if (result.status !== 'SUCCESSFUL') {
-      return res.status(400)
+      return res.status(401)
         .json({ message: result.data.message });
     }
     return res.status(200).json({ token: result.token });
