@@ -10,16 +10,22 @@ export default class MatchsService {
     return { status: 'SUCCESSFUL', data: newmatch };
   }
 
-  public async findAllMatches(): Promise<ServiceResponse<IMatch[]>> {
-    const allMatchs = await this.matchModel.findAllMatches();
-    if (!allMatchs) return { status: 'NOT_FOUND', data: { message: 'No match found' } };
-    return { status: 'SUCCESSFUL', data: allMatchs };
+  public async findAllMatches(inProgress: string | undefined): Promise<ServiceResponse<IMatch[]>> {
+    const allMatches = await this.matchModel.findAllMatches();
+    if (!allMatches) return { status: 'NOT_FOUND', data: { message: 'No match found' } };
+    if (inProgress) {
+      const filteredMatches = allMatches
+        .filter((match) => match.inProgress.toString() === inProgress);
+      return { status: 'SUCCESSFUL', data: filteredMatches };
+    }
+    return { status: 'SUCCESSFUL', data: allMatches };
   }
 
-  public async findMatchById(id: string): Promise<ServiceResponse<IMatch>> {
-    const idNumber = Number(id);
-    const match = await this.matchModel.findMatchById(idNumber);
-    if (!match) return { status: 'NOT_FOUND', data: { message: `Match ${id} not found` } };
-    return { status: 'SUCCESSFUL', data: match };
-  }
+  // public async filterMatches(inProgress: string | undefined): Promise<ServiceResponse<IMatch[]>> {
+  //   const allMatches = await this.matchModel.findAllMatches();
+  //   if (!allMatches) return { status: 'NOT_FOUND', data: { message: 'No match found' } };
+  //   const filteredMatches = allMatches
+  //     .filter((match) => match.inProgress.toString() === inProgress);
+  //   return { status: 'SUCCESSFUL', data: filteredMatches };
+  // }
 }

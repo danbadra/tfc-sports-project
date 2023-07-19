@@ -12,15 +12,18 @@ export default class MatchController {
   }
 
   public async findAllMatches(req: Request, res: Response) {
-    const serviceResponse = await this.matchService.findAllMatches();
+    const { inProgress } = req.query;
+    const inProgressString = inProgress?.toString();
+    const serviceResponse = await this.matchService.findAllMatches(inProgressString);
     if (serviceResponse.status !== 'SUCCESSFUL') return res.status(400).json(serviceResponse.data);
     res.status(200).json(serviceResponse.data);
   }
 
-  public async findMatchById(req: Request, res: Response) {
-    const { id } = req.params;
-    const serviceResponse = await this.matchService.findMatchById(id);
-    if (serviceResponse.status !== 'SUCCESSFUL') return res.status(400).json(serviceResponse.data);
-    res.status(200).json(serviceResponse.data);
-  }
+  // public async filterMatches(req: Request, res: Response) {
+  //   const { inProgress } = req.query;
+  //   const inProgressString = inProgress?.toString();
+  //   const serviceResponse = await this.matchService.filterMatches(inProgressString);
+  //   if (serviceResponse.status !== 'SUCCESSFUL') return res.status(400).json(serviceResponse.data);
+  //   res.status(200).json(serviceResponse.data);
+  // }
 }

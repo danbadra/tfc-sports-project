@@ -22,11 +22,4 @@ export default class MatchModel implements IMatchModel {
     });
     return dbData;
   }
-
-  async findMatchById(id: IMatch['id']): Promise<IMatch | null> {
-    const dbData = await this.model.findByPk(id);
-    if (dbData == null) return null;
-    const { homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress }: IMatch = dbData;
-    return { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress };
-  }
 }

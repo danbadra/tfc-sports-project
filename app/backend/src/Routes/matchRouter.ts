@@ -15,9 +15,9 @@ router.get(
   (req: Request, res: Response) => matchController.findAllMatches(req, res),
 );
 
-router.get(
-  '/:id',
-  (req: Request, res: Response) => matchController.findMatchById(req, res),
-);
+// router.get(
+//   '/',
+//   (req: Request, res: Response) => matchController.filterMatches(req, res),
+// );
 
 export default router;
