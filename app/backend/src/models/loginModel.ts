@@ -17,4 +17,12 @@ export default class LoginModel {
     const userToken = this.webToken.createToken(foundUser.dataValues);
     return { status: 'SUCCESSFUL', token: userToken };
   }
+
+  async getUserRole(id: number): Promise<ServiceResponse<{ role: string | 'User not found' }>> {
+    const user = await this.model.findByPk(id);
+    if (!user) {
+      return { status: 'NOT_FOUND', data: { message: 'User not found' } };
+    }
+    return { status: 'SUCCESSFUL', data: { role: user.role } };
+  }
 }

@@ -7,16 +7,17 @@ type TokenPayload = {
   email: string,
 };
 
-function verifyToken(token: string): TokenPayload {
-  return jwt.verify(token, secret) as TokenPayload;
-}
-
-const createToken = (payload: TokenPayload) => {
+const createToken = (payload: TokenPayload): string => {
   const token = jwt.sign(payload, secret);
   return token;
 };
 
+function decodeToken(token: string): TokenPayload {
+  const decoded = jwt.verify(token, secret);
+  return decoded as TokenPayload;
+}
+
 export default {
   createToken,
-  verifyToken,
+  decodeToken,
 };
