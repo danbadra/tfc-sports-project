@@ -25,7 +25,7 @@ export default class MatchModel implements IMatchModel {
 
   async finishMatch(id: number): Promise<string> {
     const matchToFinish = await this.model.findByPk(id);
-    const finishedMatch = matchToFinish?.update({ inProgress: false });
+    const finishedMatch = await matchToFinish?.update({ inProgress: false });
     console.log(finishedMatch);
     return 'Finished';
   }
