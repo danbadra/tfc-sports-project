@@ -1,3 +1,4 @@
+import { Update } from '../types/updateType';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 import { IMatchModel } from '../Interfaces/Matches/IMatchModel';
 import IMatch from '../Interfaces/Matches/IMatch';
@@ -25,8 +26,19 @@ export default class MatchModel implements IMatchModel {
 
   async finishMatch(id: number): Promise<string> {
     const matchToFinish = await this.model.findByPk(id);
-    const finishedMatch = await matchToFinish?.update({ inProgress: false });
-    console.log(finishedMatch);
+    await matchToFinish?.update({ inProgress: false });
     return 'Finished';
+  }
+
+  async updateMatch(id: number, update: Update): Promise<string> {
+    const matchToUpdate = await this.model.findByPk(id);
+    console.log(matchToUpdate);
+    await matchToUpdate?.update(
+      {
+        homeTeamGoals: update.homeTeamGoals,
+        awayTeamGoals: update.awayTeamGoals,
+      },
+    );
+    return 'Updated';
   }
 }

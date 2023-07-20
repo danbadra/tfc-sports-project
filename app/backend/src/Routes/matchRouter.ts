@@ -22,4 +22,10 @@ router.patch(
   (req: Request, res: Response) => matchController.finishMatch(req, res),
 );
 
+router.patch(
+  '/:id',
+  tokenValidation.verifyToken,
+  (req: Request, res: Response) => matchController.updateMatch(req, res),
+);
+
 export default router;

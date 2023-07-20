@@ -1,6 +1,9 @@
+import { Update } from '../types/updateType';
 import IMatch from '../Interfaces/Matches/IMatch';
 import MatchModel from '../models/matchModel';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
+
+const noMatchFound = 'No match found';
 
 export default class MatchsService {
   protected matchModel = new MatchModel();
@@ -13,7 +16,7 @@ export default class MatchsService {
   public async findAllMatches(inProgress: string | undefined): Promise<ServiceResponse<IMatch[]>> {
     const allMatches = await this.matchModel.findAllMatches();
 
-    if (!allMatches) return { status: 'NOT_FOUND', data: { message: 'No match found' } };
+    if (!allMatches) return { status: 'NOT_FOUND', data: { message: noMatchFound } };
 
     if (inProgress) {
       const filteredMatches = allMatches
@@ -27,8 +30,16 @@ export default class MatchsService {
   public async finishMatch(id: number): Promise<ServiceResponse<IMatch> | string> {
     const finishedMatch = await this.matchModel.finishMatch(id);
     if (!finishedMatch) {
-      return 'No match found';
+      return noMatchFound;
     }
     return 'Finished';
+  }
+
+  public async updateMatch(id: number, update: Update): Promise<ServiceResponse<IMatch> | string> {
+    const updatedMatch = await this.matchModel.updateMatch(id, update);
+    if (!updatedMatch) {
+      return noMatchFound;
+    }
+    return 'Updated';
   }
 }

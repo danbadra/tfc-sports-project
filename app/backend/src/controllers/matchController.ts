@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import MatchService from '../services/matchService';
 
+const noMatchFound = 'No match found';
+
 export default class MatchController {
   constructor(
     private matchService = new MatchService(),
@@ -22,7 +24,15 @@ export default class MatchController {
   public async finishMatch(req: Request, res: Response) {
     const { id } = req.params;
     const serviceResponse = await this.matchService.finishMatch(Number(id));
-    if (serviceResponse === 'No match Found') return res.status(400).json('No match Found');
+    if (serviceResponse === 'No match Found') return res.status(400).json(noMatchFound);
+    res.status(200).json(serviceResponse);
+  }
+
+  public async updateMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const update = req.body;
+    const serviceResponse = await this.matchService.updateMatch(Number(id), update);
+    if (serviceResponse === 'No match Found') return res.status(400).json(noMatchFound);
     res.status(200).json(serviceResponse);
   }
 }
