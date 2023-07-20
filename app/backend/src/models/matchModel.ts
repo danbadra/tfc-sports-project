@@ -22,4 +22,11 @@ export default class MatchModel implements IMatchModel {
     });
     return dbData;
   }
+
+  async finishMatch(id: number): Promise<string> {
+    const matchToFinish = await this.model.findByPk(id);
+    const finishedMatch = matchToFinish?.update({ inProgress: false });
+    console.log(finishedMatch);
+    return 'Finished';
+  }
 }

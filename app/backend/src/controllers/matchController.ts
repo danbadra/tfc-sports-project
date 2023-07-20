@@ -19,11 +19,10 @@ export default class MatchController {
     res.status(200).json(serviceResponse.data);
   }
 
-  // public async filterMatches(req: Request, res: Response) {
-  //   const { inProgress } = req.query;
-  //   const inProgressString = inProgress?.toString();
-  //   const serviceResponse = await this.matchService.filterMatches(inProgressString);
-  //   if (serviceResponse.status !== 'SUCCESSFUL') return res.status(400).json(serviceResponse.data);
-  //   res.status(200).json(serviceResponse.data);
-  // }
+  public async finishMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const serviceResponse = await this.matchService.finishMatch(Number(id));
+    if (serviceResponse === 'No match Found') return res.status(400).json('No match Found');
+    res.status(200).json(serviceResponse);
+  }
 }

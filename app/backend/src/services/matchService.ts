@@ -12,20 +12,23 @@ export default class MatchsService {
 
   public async findAllMatches(inProgress: string | undefined): Promise<ServiceResponse<IMatch[]>> {
     const allMatches = await this.matchModel.findAllMatches();
+
     if (!allMatches) return { status: 'NOT_FOUND', data: { message: 'No match found' } };
+
     if (inProgress) {
       const filteredMatches = allMatches
         .filter((match) => match.inProgress.toString() === inProgress);
       return { status: 'SUCCESSFUL', data: filteredMatches };
     }
+
     return { status: 'SUCCESSFUL', data: allMatches };
   }
 
-  // public async filterMatches(inProgress: string | undefined): Promise<ServiceResponse<IMatch[]>> {
-  //   const allMatches = await this.matchModel.findAllMatches();
-  //   if (!allMatches) return { status: 'NOT_FOUND', data: { message: 'No match found' } };
-  //   const filteredMatches = allMatches
-  //     .filter((match) => match.inProgress.toString() === inProgress);
-  //   return { status: 'SUCCESSFUL', data: filteredMatches };
-  // }
+  public async finishMatch(id: number): Promise<ServiceResponse<IMatch> | string> {
+    const finishedMatch = await this.matchModel.finishMatch(id);
+    if (!finishedMatch) {
+      return 'No match found';
+    }
+    return 'Finished';
+  }
 }
