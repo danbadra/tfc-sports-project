@@ -3,13 +3,13 @@ import SequelizeTeam from '../database/models/SequelizeTeam';
 import { IMatchModel } from '../Interfaces/Matches/IMatchModel';
 import IMatch from '../Interfaces/Matches/IMatch';
 import SequelizeMatch from '../database/models/SequelizeMatch';
-// import { NewEntity } from '../Interfaces/index';
+import { NewEntity } from '../Interfaces/INewEntity';
 
 export default class MatchModel implements IMatchModel {
   private model = SequelizeMatch;
 
-  async createMatch(data: IMatch): Promise<IMatch> {
-    const dbData = await this.model.create(data);
+  async createMatch(newMatch: NewEntity<IMatch>): Promise<IMatch> {
+    const dbData = await this.model.create(newMatch);
     const { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress }: IMatch = dbData;
     return { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress };
   }

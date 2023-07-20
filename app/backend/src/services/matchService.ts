@@ -1,3 +1,5 @@
+import { NewEntity } from '../Interfaces/INewEntity';
+// import { Match } from '../types/newMatchType';
 import { Update } from '../types/updateType';
 import IMatch from '../Interfaces/Matches/IMatch';
 import MatchModel from '../models/matchModel';
@@ -8,8 +10,8 @@ const noMatchFound = 'No match found';
 export default class MatchsService {
   protected matchModel = new MatchModel();
 
-  public async createMatch(match: IMatch): Promise<ServiceResponse<IMatch>> {
-    const newmatch = await this.matchModel.createMatch(match);
+  public async createMatch(newMatch: NewEntity<IMatch>): Promise<ServiceResponse<IMatch>> {
+    const newmatch = await this.matchModel.createMatch(newMatch);
     return { status: 'SUCCESSFUL', data: newmatch };
   }
 

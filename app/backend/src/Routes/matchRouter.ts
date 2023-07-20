@@ -8,6 +8,7 @@ const router = Router();
 
 router.post(
   '/',
+  tokenValidation.verifyToken,
   (req: Request, res: Response) => matchController.createMatch(req, res),
 );
 
