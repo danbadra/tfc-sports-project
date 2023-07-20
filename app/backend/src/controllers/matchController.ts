@@ -11,7 +11,13 @@ export default class MatchController {
   public async createMatch(req: Request, res: Response) {
     const newMatch = req.body;
     const serviceResponse = await this.matchService.createMatch(newMatch);
-    res.status(201).json(serviceResponse.data);
+    if (serviceResponse.status === 'INVALID_DATA') {
+      return res.status(422).json(serviceResponse.data);
+    }
+    if (serviceResponse.status === 'NOT_FOUND') {
+      return res.status(404).json(serviceResponse.data);
+    }
+    return res.status(201).json(serviceResponse.data);
   }
 
   public async findAllMatches(req: Request, res: Response) {

@@ -4,13 +4,30 @@ import { Update } from '../types/updateType';
 import IMatch from '../Interfaces/Matches/IMatch';
 import MatchModel from '../models/matchModel';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
+import TeamModel from '../models/teamsModel';
 
 const noMatchFound = 'No match found';
 
 export default class MatchsService {
   protected matchModel = new MatchModel();
+  protected teamModel = new TeamModel();
 
   public async createMatch(newMatch: NewEntity<IMatch>): Promise<ServiceResponse<IMatch>> {
+    if (newMatch.homeTeamId === newMatch.awayTeamId) {
+      return {
+        status: 'INVALID_DATA',
+        data: { message: 'It is not possible to create a match with two equal teams' } };
+    }
+
+    const existingHomeTeam = await this.teamModel.findById(newMatch.homeTeamId);
+    const existingAwayTeam = await this.teamModel.findById(newMatch.awayTeamId);
+
+    if (!existingHomeTeam || !existingAwayTeam) {
+      return {
+        status: 'NOT_FOUND',
+        data: { message: 'There is no team with such id!' } };
+    }
+
     const newmatch = await this.matchModel.createMatch(newMatch);
     return { status: 'SUCCESSFUL', data: newmatch };
   }
