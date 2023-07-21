@@ -48,6 +48,7 @@ export default class MatchsService {
 
   public async finishMatch(id: number): Promise<ServiceResponse<IMatch> | string> {
     const finishedMatch = await this.matchModel.finishMatch(id);
+    console.log(finishedMatch);
     if (!finishedMatch) {
       return noMatchFound;
     }

@@ -1,7 +1,4 @@
 import { ILeaderboardModel } from '../Interfaces/Leaderboards/ILeaderboardModel';
-// import SequelizeMatch from '../database/models/SequelizeMatch';
-// import SequelizeTeam from '../database/models/SequelizeTeam';
-// import IMatch from '../Interfaces/Matches/IMatch';
 import MatchModel from './matchModel';
 import ILeaderboardMatch from '../Interfaces/Leaderboards/ILeaderboardMatch';
 

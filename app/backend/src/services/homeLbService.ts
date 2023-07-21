@@ -63,7 +63,7 @@ export default class HomeLeaderboardsService {
     return allTeamFavorGoals;
   }
 
-  // 5. Retorna um array de number[] com todos os Favor Goals de cada time
+  // 5. Retorna um array de number[] com todos os Own Goals de cada time
   public async getOwnGoals(): Promise<Array<number[]>> {
     const { data, teamNames } = await this.getHomeTeamInfo();
     const allTeamOwnGoals: Array<number[]> = [];
@@ -86,7 +86,7 @@ export default class HomeLeaderboardsService {
     teamNames.forEach((teamName) => {
       const teamGoals: number[] = [];
       data.forEach((match) => {
-        if (match.dataValues.awayTeam.teamName === teamName) {
+        if (match.dataValues.homeTeam.teamName === teamName) {
           teamGoals.push(match.dataValues.homeTeamGoals - match.dataValues.awayTeamGoals);
         }
       });
