@@ -2,7 +2,7 @@ import ILeaderboard from '../Interfaces/Leaderboards/ILeaderboard';
 import LeaderboardModel from '../models/lbModel';
 import ILeaderboardMatch from '../Interfaces/Leaderboards/ILeaderboardMatch';
 
-type HomeTeamInfo = {
+type AwayTeamInfo = {
   data: ILeaderboardMatch[],
   teamNames: string[],
   goalsFavor: number[],
@@ -19,29 +19,29 @@ type Blah = {
   aproveitamento: number[],
 };
 
-const homeLeaderBoard: ILeaderboard[] = [];
+const awayLeaderBoard: ILeaderboard[] = [];
 
-export default class HomeLeaderboardsService {
+export default class AwayLeaderboardsService {
   protected leaderboardModel = new LeaderboardModel();
 
-  public async getHomeTeamInfo(): Promise<HomeTeamInfo> {
+  public async getAwayTeamInfo(): Promise<AwayTeamInfo> {
     const matchesData = await this.leaderboardModel.collectMatchesData();
     // 1. Retorna um array com todos os nomes de times
     const allTeamNames = matchesData
-      .map((match) => match.dataValues.homeTeam.teamName)
+      .map((match) => match.dataValues.awayTeam.teamName)
       .filter((teamName, index, array) => array.indexOf(teamName) === index);
-    // 2. Retorna a soma de homeTeamGols que um time marcou:
+    // 2. Retorna a soma de gols que um time marcou (homeTeamGoals):
     const proGoals = allTeamNames.map((team) => {
       const teamGoalsSum = matchesData
-        .filter((match) => match.dataValues.homeTeam.teamName === team)
-        .reduce((total, match) => total + match.dataValues.homeTeamGoals, 0);
+        .filter((match) => match.dataValues.awayTeam.teamName === team)
+        .reduce((total, match) => total + match.dataValues.awayTeamGoals, 0);
       return teamGoalsSum;
     });
     // 3. Retorna a soma de gols que um time sofreu (awayTeamGoals):
     const conGoals = allTeamNames.map((team) => {
       const teamGoalsSum = matchesData
-        .filter((match) => match.dataValues.homeTeam.teamName === team)
-        .reduce((total, match) => total + match.dataValues.awayTeamGoals, 0);
+        .filter((match) => match.dataValues.awayTeam.teamName === team)
+        .reduce((total, match) => total + match.dataValues.homeTeamGoals, 0);
       return teamGoalsSum;
     });
     return { data: matchesData, teamNames: allTeamNames, goalsFavor: proGoals, goalsOwn: conGoals };
@@ -49,13 +49,13 @@ export default class HomeLeaderboardsService {
 
   // 4. Retorna um array de number[] com todos os Favor Goals de cada time
   public async getFavorGoals(): Promise<Array<number[]>> {
-    const { data, teamNames } = await this.getHomeTeamInfo();
+    const { data, teamNames } = await this.getAwayTeamInfo();
     const allTeamFavorGoals: Array<number[]> = [];
     teamNames.forEach((teamName) => {
       const teamGoals: number[] = [];
       data.forEach((match) => {
-        if (match.dataValues.homeTeam.teamName === teamName) {
-          teamGoals.push(match.dataValues.homeTeamGoals);
+        if (match.dataValues.awayTeam.teamName === teamName) {
+          teamGoals.push(match.dataValues.awayTeamGoals);
         }
       });
       allTeamFavorGoals.push(teamGoals);
@@ -63,15 +63,15 @@ export default class HomeLeaderboardsService {
     return allTeamFavorGoals;
   }
 
-  // 5. Retorna um array de number[] com todos os Favor Goals de cada time
+  // 5. Retorna um array de number[] com todos os Own Goals de cada time
   public async getOwnGoals(): Promise<Array<number[]>> {
-    const { data, teamNames } = await this.getHomeTeamInfo();
+    const { data, teamNames } = await this.getAwayTeamInfo();
     const allTeamOwnGoals: Array<number[]> = [];
     teamNames.forEach((teamName) => {
       const teamGoals: number[] = [];
       data.forEach((match) => {
         if (match.dataValues.awayTeam.teamName === teamName) {
-          teamGoals.push(match.dataValues.awayTeamGoals);
+          teamGoals.push(match.dataValues.homeTeamGoals);
         }
       });
       allTeamOwnGoals.push(teamGoals);
@@ -81,13 +81,13 @@ export default class HomeLeaderboardsService {
 
   // 6. Retorna um array de arrays. Cada número em um subArray é o resultado de cada partida.
   public async getMatchesResults(): Promise<Array<number[]>> {
-    const { data, teamNames } = await this.getHomeTeamInfo();
+    const { data, teamNames } = await this.getAwayTeamInfo();
     const allMatchesResults: Array<number[]> = [];
     teamNames.forEach((teamName) => {
       const teamGoals: number[] = [];
       data.forEach((match) => {
         if (match.dataValues.awayTeam.teamName === teamName) {
-          teamGoals.push(match.dataValues.homeTeamGoals - match.dataValues.awayTeamGoals);
+          teamGoals.push(match.dataValues.awayTeamGoals - match.dataValues.homeTeamGoals);
         }
       });
       allMatchesResults.push(teamGoals);
@@ -194,7 +194,7 @@ export default class HomeLeaderboardsService {
 
   //  14. Monta o objeto (linha do lb) e coloca no array
   public async assembleLines(): Promise<ILeaderboard[]> {
-    const { teamNames, goalsFavor, goalsOwn } = await this.getHomeTeamInfo();
+    const { teamNames, goalsFavor, goalsOwn } = await this.getAwayTeamInfo();
     const info = await this.getNecessaryMethods();
 
     teamNames.forEach(async (team, i) => {
@@ -209,21 +209,21 @@ export default class HomeLeaderboardsService {
         goalsBalance: info.saldo[i],
         efficiency: info.aproveitamento[i],
       };
-      homeLeaderBoard.push(lbLine);
+      awayLeaderBoard.push(lbLine);
     });
-    return homeLeaderBoard;
+    return awayLeaderBoard;
   }
 
   // 15. Ordena os os objetos por prioridade
-  public async sortHomeLb(): Promise<ILeaderboard[]> {
+  public async sortAwayLb(): Promise<ILeaderboard[]> {
     await this.assembleLines();
-    homeLeaderBoard.sort((teamA, teamB) => (
+    awayLeaderBoard.sort((teamA, teamB) => (
       teamB.totalPoints - teamA.totalPoints
       || teamB.totalVictories - teamA.totalVictories
       || teamB.goalsBalance - teamA.goalsBalance
       || teamB.goalsFavor - teamA.goalsFavor
       || teamB.goalsOwn - teamA.goalsOwn
     ));
-    return homeLeaderBoard;
+    return awayLeaderBoard;
   }
 }
