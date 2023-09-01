@@ -1,2 +1,2 @@
 # TFC Sports
-TFC Sports utilizes Typescript, React, Node.js and MySQL - as well as Mocha, Sinon and Chai for testing -, to deliver a web application that tracks sports matches and presents them in leaderboards.
+TFC Sports a full-stack application where an API was built to support the front-end, using TypeScript, Node.js, and Sequelize, along with Object-Oriented Programming methodologies and SOLID principles. In the application, you can view match results, filter them, log into your account, change the match status, add a match, and perform other functions. The entire application is tested using Mocha, Jest, Chai, and Sinon and incorporates validations and encryption alongside the MySQL database.
